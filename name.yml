@@ -1,0 +1,9 @@
+name: "Learning YAML from Scratch"
+
+steps:
+  - name: first 
+    run : echo hello
+  - name: second
+    run: echo "Learning Yaml"
+
+

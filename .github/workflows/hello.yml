@@ -16,8 +16,12 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Print trigger details
+            # Event: which triggered the workflow (push, pull_request, workflow_dispatch)
+            # Ref: the branch or tag )  ref/heads/main, refs/pull/12/merge , etc
+            # SHA: commit ID
+            # Actor: Github username who trigger the workflow. 
               run: |
-                echo "Event: ${{ github.event_name }}"
+                echo "Event: ${{ github.event_name }}"  
                 echo "Ref: ${{ github.ref }}"
                 echo "SHA: ${{ github.sha }}"
                 echo "Actor: ${{ github.actor }}"

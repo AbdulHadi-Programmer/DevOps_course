@@ -1,0 +1,47 @@
+name: Build Stage Demo 
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+jobs:
+    builds:
+        runs-on: ubuntu-latest 
+
+        steps:
+            # 1. Checkout code (always needed)
+            - name: checkout repository
+              uses: actions/checkout@v4
+
+            # 2. Setup Node.js (Build environment)
+            - name: Setup Node.js  
+              uses: actions/setup-node@v4
+              with: 
+                node-version: "20"   #pick your version
+                cache: "npm"   # cache npm dependencies 
+
+            # 3. Install Dependencies:
+            - name: Install Dependencies
+              run: npm ci
+            
+            # 4. Lint/ Static Analysis
+            - name: Lint code
+              run: npm run lint --if-present
+
+            # 5. Built the project :
+            - name: Build Project
+              run: npm run build --if-present 
+
+            # 6. Upload build outputs (artifacts)
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v4 
+              with:
+                name: build-dist
+                path: dist/ 
+
+                
+
+
+
+
