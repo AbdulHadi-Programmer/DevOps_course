@@ -1,0 +1,33 @@
+name: Python Build Stage Demo
+
+on:
+    push:
+        branches: [master]   # runs when you push to master 
+    pull_request:
+        branches: [main]    # run on PR to main 
+ 
+
+jobs:
+    build:
+        runs-on: ubuntu-latest 
+
+        steps:
+            # 1. Checkout repo
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+            
+            # 2. Setup Python Environment
+            - name: Set up Python
+              uses: action/setup-python@v5
+
+            # 3. Install Dependencies
+            - name: Install dependencies
+              run: |
+                python -m pip install --upgrade pip
+                if [ -r requirements.txt ]; then pip install -r requirements.txt
+            
+            # 4. Run a Python Script
+            - name: Run script
+              run: python hello.py  # this should be your script file name
+
+
