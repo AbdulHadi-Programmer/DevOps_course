@@ -1,0 +1,23 @@
+name: Source - Trigger Demo
+
+# When to run the workflow
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch : {}
+
+jobs:
+    print-trigger:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Print trigger details
+              run: |
+                echo "Event: ${{ github.event_name }}"
+                echo "Ref: ${{ github.ref }}"
+                echo "SHA: ${{ github.sha }}"
+                echo "Actor: ${{ github.actor }}"
