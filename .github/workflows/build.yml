@@ -2,7 +2,7 @@ name: Build Stage Demo
 
 on:
     push:
-        branches: [main]
+        branches: [master]
     pull_request:
 
 jobs:
