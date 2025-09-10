@@ -67,4 +67,28 @@ jobs:
     needs: build
     steps:
       - run: echo "Running tests after build..."
-# Understand needs: (job dependencies)
+### Understand needs: (job dependencies)
+
+#### Script 4:
+## Artifacts:
+# Create a dummy file:
+      - run: echo "Build result" > result.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: result
+          path: result.txt 
+# In another job:
+      - uses: actions/download-artifact@v4
+        with: 
+          name: result
+      - run: cat result.txt 
+# Learn to pass files between jobs
+
+## ## Conditionals and Branch Filters
+###### Script 5
+# jobs:
+  # deploy-qa:
+    # runs-on: ububtu-latest
+    # if: github.ref == 'refs/heads/dev'
+    # steps:
+      # - run: echo "Deploying the QA"
