@@ -38,3 +38,6 @@ job1:
 * My First Github Workflow
 Create .github/workflows/hello.yml
 
+
+# 2️⃣ Python Script with Artifact
+<!-- Have a Python script generate.py: -->
