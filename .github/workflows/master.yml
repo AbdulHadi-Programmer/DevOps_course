@@ -50,7 +50,7 @@ on:
 #       - uses: actions/checkout@v4 
 #       - uses: actions/setup-python@v5
 #         with:
-#           python-version: "3.13"
+#           python-version: "3.9"
 #       - run: python main.py
     
 ## ✅ You just automated running Python in GitHub Actions.
@@ -123,7 +123,7 @@ on:
 #       - uses: actions/checkout@v4
 #       - uses: actions/setup-python@v5
 #         with:
-#           python-version: "3.13"
+#           python-version: "3.9"
 #       - run: python generate.py
 #       - uses: actions/upload-artifact@v4
 #         with:
@@ -178,7 +178,7 @@ jobs:
     runs-on: ubuntu-22.04 
     strategy:
       matrix:
-        python: [3.9, 3.10, 3.11]
+        python: ['3.9', '3.10', '3.11']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5 
