@@ -88,9 +88,29 @@ on:
 
 ## ## Conditionals and Branch Filters
 ###### Script 5
+# jobs:
+#   deploy-qa:  # name of this job (anything we can write)
+#     runs-on: ububtu-latest  
+#     # Conditionals. This job only runs if the branch is dev. 
+#     # Example: 
+#       # - Push to main → ❌ won’t run.
+#       # Push to dev → ✅ runs.
+#     `if`: github.ref == 'refs/heads/dev'   # remove brakets `` while running the script
+#     steps:
+#       - run: echo "Deploying the QA"
+      
+#### 5 Practice Script Ideas (to make you sharp)
+### Here are incremental exercises you can try. Each one builds a DevOps skill.
+## Hello Workflow with Conditions
+# Write a workflow that:
+# - Runs on every push.
+# - Print different messages depending on the branch
+
 jobs:
-  deploy-qa:
-    runs-on: ububtu-latest
-    if: github.ref == 'refs/heads/dev'
+  greet:
+    runs-on: ubuntu-latest
     steps:
-      - run: echo "Deploying the QA"
+      - name: Sctipt One
+        run: echo "Hello Workflow with Conditions"
+      - run: echo "Hello from ${{ github.ref }}"
+
