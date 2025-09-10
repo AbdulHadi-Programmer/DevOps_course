@@ -2,7 +2,7 @@ name: Python Build      # Name of Workflow
 
 on:
   push:
-    branches: [master]   # or main, depending on your repo
+    branches: [main]   # or main, depending on your repo
   pull_request:
     branches: [main]
   workflow_dispatch: {}  # add manual trigger button
