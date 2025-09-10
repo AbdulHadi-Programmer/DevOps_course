@@ -38,18 +38,33 @@ on:
 #       - name: Print Hello 
 #         run: echo "Hello DevOps Master 🚀"
 
-##  Script 2: 
-# Update workflows:
-jobs:
-  run-python:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - run: python main.py
-
-
+####  Script 2: 
+## Update workflows:
+## In this workflow: it install python and it run python file 
+# jobs:
+#   run-python:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4 
+#       - uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.13"
+#       - run: python main.py
+    
 ## ✅ You just automated running Python in GitHub Actions.
 
+### Script 3:
+#### Add Multiple Jobs + Dependencies
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Script 3"
+      - run: echo "Building Project...."
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: echo "Running tests after build..."
+# Understand needs: (job dependencies)
