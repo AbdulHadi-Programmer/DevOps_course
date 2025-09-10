@@ -90,7 +90,7 @@ on:
 ###### Script 5
 jobs:
   deploy-qa:
-    runs-on: ububtu-latest
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     steps:
       - run: echo "Deploying the QA"
