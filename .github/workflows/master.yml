@@ -134,21 +134,53 @@ on:
 #### 3. Multu-Job Workflow (Build → Test)
 ### - First job: "build" → create a file output.txt
 ### - Second job: "test" → download the file and print its content.
-jobs: 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Build Output" > output.txt
-      - uses: actions/upload-artifact@v4
-        with:
-          name: output
-          path: output.txt
+# jobs: 
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "Build Output" > output.txt
+#       - uses: actions/upload-artifact@v4
+#         with:
+#           name: output
+#           path: output.txt
 
+#   test:
+#     runs-on: ubuntu-latest
+#     needs: build  # this job wait until this build complete
+#     steps:
+#       - uses: actions/download-artifact@v4
+#         with:
+#           name: output
+#       - run: cat output.txt
+
+##### 4. Branch-based Deployment Simulation:
+  # - Push to dev → print "Deploying to QA".
+  # - Push to main → print "Deploying to Production".
+# jobs:
+#   deploy-qa:
+#     runs-on: ubuntu-latest
+#     if:: github.ref == 'refs/heads/dev'
+#     steps:
+#       - run: echo "Deploying to QA environment"
+
+#   deploy-prod:
+#     runs-on: ubuntu-latest
+#     if:: github.ref == 'ref/heads/main'
+#     steps: 
+#       - run: echo "Deploying to Production environment"
+# Practice: Conditional deployments
+
+#### Matrix Testing (Node or Python)
+# Test across multiple versions
+jobs:
   test:
     runs-on: ubuntu-latest
-    needs: build
+    strategy:
+      matrix:
+        python: [3.9, 3.10, 3.11, 3.12, 3.13]
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: output
-      - run: cat output.txt
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5 
+        with: 
+          python-version: ${{ matrix.python }}
+      - run: python --version
