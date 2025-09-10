@@ -71,4 +71,122 @@ Now you combine:
    - Did it install Node and dependencies ?
    - Did it run lint/built?
    - Can you download the artifact (build-dist.zip)?
-   
+
+# =================================================
+#                     10 Sep 2025
+# =================================================
+
+# Step 1 — Core Building Blocks
+1. Workflow file location
+  - Must be inside `.github/workflows/`
+  - Each file = one workflow.
+  - File Extension: `.yml` or `.yaml` 
+
+2. **Workflow Structure :**
+Every Github Action YAML has this skeleton :
+
+```
+name: My Workflow         # Display name in Actions tab
+
+on:                       # Triggers
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:                     # Jobs to run
+  job_name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run command
+        run: echo "Hello World"
+
+```
+
+3. **Triggers:**
+- `push` → runs on branch pushes 
+- `pull_request` → runs when a PR is opened/updated
+- `workflow_dispatch` → allows manual run.
+
+## Step 2 —— Jobs and Dependencies
+- Workflows can have multiple jobs
+- Jobs run in parallel by default
+- Use `needs:` to make one job wait for another.
+
+* Example:
+```
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Building app"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build    # wait until build finishes
+    steps:
+      - run: echo "Deploying app"
+```
+
+# Step 3 —— Artifacts
+Artifacts = files saved from one job → used in another.
+
+```
+- name: Upload artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: build-output
+    path: dist/
+
+- name: Download artifact
+  uses: actions/download-artifact@v4
+  with:
+    name: build-output
+```
+
+# Step 4 —— Conditionals and Environments 
+`Use` **if:** `to control when jobs/steps run.`
+```
+jobs:
+  deploy_qa:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - run: echo "Deploying to QA"
+```
+
+# Step 5 —— Matrix Strategy
+Run tests across multiple environments.
+```
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [16, 18, 20]
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+```
+
+# Step 6 —— Concurrency 
+Prevent overlapping deploys:
+```
+concurrency:
+    group: deploy-${{ github.ref }}
+    cancel-in-progress: true
+```
+
+# Step 7 —— Notifications
+You can call slack/Teamms via webhook at the end:
+```
+- name: Notify Slack
+  run: curl -X POST -H 'Content-type: application/json' \
+       --data '{"text":"✅ Production deploy finished"}' \
+       ${{ secrets.SLACK_WEBHOOK_URL }}
+```

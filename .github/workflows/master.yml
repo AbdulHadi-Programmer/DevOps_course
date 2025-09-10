@@ -1,0 +1,37 @@
+#### Learning Yaml to become DevOps unbeatable Person in the Industry:
+####  Phase 1 -- Foundations (YAML + Github Actions Basics)
+# name: Abdul Hadi
+# level: beginner
+
+# skills:
+#   - CI/CD 
+#   - Docker
+#   - Kubernetes
+
+# student:
+#   name: Abdul Bari
+#   goals:
+#     - master CI/CD 
+#     - learn Kubernetes 
+
+
+# defaults: &defaults
+#   runs-on: ubuntu-latest 
+#   timeout-minutes: 10
+
+# job1:
+#   <<: *defaults
+
+name: Hello workflow
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Hello 
+        run: echo "Hello DevOps Master 🚀"
