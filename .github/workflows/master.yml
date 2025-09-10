@@ -22,16 +22,34 @@
 # job1:
 #   <<: *defaults
 
-name: Hello workflow
+# Script 1: Print the single line when push on master branch
+# name: Hello workflow
 
+# This below line is neccessary in every script:
 on:
   push:
     branches: [master]
   workflow_dispatch: {}
 
+# jobs:
+#   say-hello:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Print Hello 
+#         run: echo "Hello DevOps Master 🚀"
+
+##  Script 2: 
+# Update workflows:
 jobs:
-  say-hello:
+  run-python:
     runs-on: ubuntu-latest
     steps:
-      - name: Print Hello 
-        run: echo "Hello DevOps Master 🚀"
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python main.py
+
+
+## ✅ You just automated running Python in GitHub Actions.
+
