@@ -11,5 +11,7 @@ jobs:
         steps:
             - name: Checkout Code
               uses: actions/checkout@v4 
-            - name: Run Shell Script 
+            - name: Give Permission to Script 
               run: chmod +x ./Assignment/run.sh 
+            - name: Running Script
+              run: bash ./Assignment/run.sh
