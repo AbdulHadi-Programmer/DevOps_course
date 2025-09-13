@@ -2,5 +2,23 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest"
+  },
+  "name": "devops_course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdulHadi-Programmer/DevOps_course.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdulHadi-Programmer/DevOps_course/issues"
+  },
+  "homepage": "https://github.com/AbdulHadi-Programmer/DevOps_course#readme",
+  "devDependencies": {
+    "eslint": "^9.35.0"
   }
 }
