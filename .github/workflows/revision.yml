@@ -108,7 +108,8 @@ jobs:
       - uses: action/setup-node@v4
         with:
           node-version: 18
-      - run: npm ci && npm run build 
+      - run: npm ci
+      - run: npm run build 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with: 
