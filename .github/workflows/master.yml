@@ -168,7 +168,7 @@
 #     if:: github.ref == 'ref/heads/main'
 #     steps: 
 #       - run: echo "Deploying to Production environment"
-# Practice: Conditional deployments
+# Practice: Conditional deploymenaments
 
 #### Matrix Testing (Node or Python)
 # Test across multiple versions
@@ -198,15 +198,15 @@
   # - Running CI for PR #xyz".   
   # - The Branch where the PR comes from
 ## 3. Write a workflow that runs manually (workflow_dispatch) and asks for an input called name, then prints Hello, <name>. 
-on:
-  push:
-  workflow_dispatch: {}
+# on:
+#   push:
+#   workflow_dispatch: {}
 
-jobs:
-  basic:
-    runs-on: ubuntu-latest
-    steps:
-    - run: echo "The Branch Name ${{ github.ref }}"
-    - run: echo "The Commit Author ${{ github.actor }}"
+# jobs:
+#   basic:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - run: echo "The Branch Name ${{ github.ref }}"
+#     - run: echo "The Commit Author ${{ github.actor }}"
   
   
