@@ -100,27 +100,35 @@ on:   # 👈 triggers
 # -  `$ {{ matrix.python }}` = interpolation (Github Syntax, not plain YAML)
 
 ## 🚀 Real-World YAML Lesson 3: Passing Artifacts Between Jobs
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - run: npm ci
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-files
-          path: .
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: 18
+#       - run: npm ci
+#       - name: Upload Artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: dist-files
+#           path: .
           
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Download Artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: dist-files
+#       - run: echo "Deploying..."
+jobs:
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-files
-      - run: echo "Deploying..."
+    # condition
+    if: github.ref == 'refs/heads/main'   
+    steps: 
+      - run: echo "Deploying to Production"
+
