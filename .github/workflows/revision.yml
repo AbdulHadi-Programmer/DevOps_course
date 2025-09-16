@@ -1,0 +1,97 @@
+# # 1. Triggers (on) → when it runs (push, PR, schedule, manual).
+# on:
+#   push:
+#     branches: [master]
+
+# # 2. Jobs → isolated environments that run tasks.
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest 
+
+#     # 3. Steps → commands or actions inside a job.
+#     steps:
+#       - uses: action/checkout@v4 
+#       - run: echo "Hello World"
+
+#       # 4. Actions → prebuilt tasks (e.g., checkout code, setup Node.js).
+#       - uses: action/setup-node@v4
+#         with: 
+#           node-version: 20 
+
+## Part 5: Learnig Plan for YAML (Step by Step)
+# 1. Practice scalars (strings, numbers, booleans, null).
+# 2. Practice lists (- item).
+# 3. Practice maps (key: value).
+# 4. Practice nesting (lists inside maps, maps inside lists).
+# 5. Practice multiline strings (| and >).
+# 6. Play with anchors (& and *).
+# 7. Combine them all in small GitHub Actions workflows.
+
+# # Q1: 
+# name: Abdul Hadi 
+# num: 12
+# cache: null 
+# is_student: True
+
+# # Q2:
+# steps:
+#   - Start VScode
+#   - Make a .py file
+#   - Start writing hello world code 
+#   - save it and run it 
+
+# # Q3: 
+# person:
+#   name: Hadi
+#   age: 19
+
+# # Q4:
+
+## Real- World YAML Lesson 1: A Github Action Workflow
+name: CI Pipeline
+on:   # 👈 triggers
+  push:
+    branches: [master]  # run only when code pushed to master
+  pull_request:  # also run on PRs
+
+# jobs:
+#   build:   # first job
+#     runs-on: ubuntu-latest  # Github Runner Environment
+#     steps:    # steps inside the job
+#       - name: Checkout Repo   
+#         uses: actions/checkout@v4  # action (prebuilt step) 
+
+#       - name: Setup Node.js 
+#         uses: action/setup-node@v4
+#         with:
+#           node-version: 20  # map under 'with'
+      
+#       - name: Install Dependencies
+#         run: npm ci    # custom command 
+
+#       - name: Run Test
+#         run: npm test 
+
+# 🔍 What you learned here:
+# on = when workflow runs (events).
+# jobs = big blocks of work.
+# steps = ordered tasks inside a job.
+# uses: = calling a prebuilt action.
+# run: = running a shell command.
+
+## Real-World YAML Lesson 2: Matrix Testing
+jobs: 
+  test:
+    runs-on: ubuntu-latest 
+    strategy: 
+      matrix: # generate multiple jobs 
+        python: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-python@v5
+        with: 
+          python-version: ${{ matrix.python }}  # insert matrix var 
+      
+      - run: echo "Showing Python Version"
+      - run: python --version
