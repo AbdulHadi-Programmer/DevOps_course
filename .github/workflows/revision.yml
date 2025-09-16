@@ -128,7 +128,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # condition
-    if: github.ref == 'refs/heads/master'   
+    if: ${{ github.ref == 'refs/heads/master' }}   
     steps: 
       - run: echo "${{ github.ref }}"
       - run: echo "Deploying to Production"
