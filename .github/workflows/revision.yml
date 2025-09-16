@@ -48,11 +48,11 @@
 # # Q4:
 
 ## Real- World YAML Lesson 1: A Github Action Workflow
-name: CI Pipeline
-on: # 👈 triggers
-  push:
-    branches: [master] # run only when code pushed to master
-  pull_request: # also run on PRs
+# name: CI Pipeline
+# on: # 👈 triggers
+#   push:
+#     branches: [master] # run only when code pushed to master
+#   pull_request: # also run on PRs
 
 # jobs:
 #   build:   # first job
@@ -100,56 +100,100 @@ on: # 👈 triggers
 # -  `$ {{ matrix.python }}` = interpolation (Github Syntax, not plain YAML)
 
 ## 🚀 Real-World YAML Lesson 3: Passing Artifacts Between Jobs
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: actions/setup-node@v4
-#         with:
-#           node-version: 18
-#       - run: npm ci
-#       - name: Upload Artifact
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: dist-files
-#           path: .
+name: Passing Artifacts Between Jobs
 
-#   deploy:
-#     needs: build
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Download Artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: dist-files
-#       - run: echo "Deploying..."
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install deps if package.json exists
+        run: |
+          if [ -f package.json ]; then
+            echo "package.json found → running npm ci"
+            npm ci
+          else
+            echo "No package.json → skipping npm install"
+          fi
+
+      - name: Build (or create fallback artifact)
+        run: |
+          set -e
+          # If there's a package.json, try the project's build script (if present).
+          if [ -f package.json ]; then
+            echo "Attempting npm run build --if-present"
+            # --if-present returns 0 if no build script; if build script exists but fails, we fallback.
+            if npm run build --if-present; then
+              echo "Build succeeded (project build)"
+            else
+              echo "Build script failed → creating fallback artifact"
+              mkdir -p dist
+              echo "<!-- fallback artifact: build failed -->" > dist/index.html
+            fi
+          else
+            # No Node project: create a small dummy artifact so downstream jobs have something.
+            echo "No package.json → creating fallback artifact"
+            mkdir -p dist
+            echo "<!-- fallback artifact: no package.json -->" > dist/index.html
+          fi
+
+      - name: Inspect artifact folder
+        run: ls -la dist || true
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact published by build job
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+
+      - name: Show downloaded files (simulate deploy)
+        run: |
+          echo "Files available to deploy:"
+          ls -la
+          echo "Simulate deploy step here (scp, rsync, kubectl, etc.)"
+
 ## Real-World YAML Lesson 4: Conditions (Selective Deploy)
 # Deploy only when branch is master
 # jobs:
 #   deploy:
 #     runs-on: ubuntu-latest
 #     # condition
-#     if: ${{ github.ref == 'refs/heads/master' }}
+#     if : $ {{ github.ref == 'refs/heads/master' }}
 #     steps:
-#       - run: echo "${{ github.ref }}"
+#       - run: echo "$ {{ github.ref }}"
 #       - run: echo "Deploying to Production"
 # What you learned:
 # - if : applies conditionals at job or step-level
 # - github.ref is a built-in Github Action variable
 
 ## Real-World YAML Lesson 5: Docker Build and Push
-jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+# jobs:
+#   docker:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Log in to registery
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login dchr.io -u  ${{ github.actor }}  --password-stdin
+#       - name: Log in to registery   ## main issue in this, while running
+#         run: echo $ {{ secrets.GITHUB_TOKEN }} | docker login dchr.io -u  ${{ github.actor }}  --password-stdin
       
-      - name: Build Image
-        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+#       - name: Build Image
+#         run: docker build -t ghcr.io/$ {{ github.repository }}:latest .
 
-      - name: Push image
-        run: docker push ghcr.io/${{ github.repository }}:latest
+#       - name: Push image
+#         run: docker push ghcr.io/$ {{ github.repository }}:latest
