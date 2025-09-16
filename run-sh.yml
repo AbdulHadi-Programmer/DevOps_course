@@ -15,3 +15,4 @@ jobs:
               run: chmod +x ./Assignment/run.sh 
             - name: Running Script
               run: bash ./Assignment/run.sh
+# Add this file in .github folder because it can't be run 
