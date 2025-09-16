@@ -80,18 +80,44 @@ on:   # 👈 triggers
 # run: = running a shell command.
 
 ## Real-World YAML Lesson 2: Matrix Testing
-jobs: 
-  test:
-    runs-on: ubuntu-latest 
-    strategy: 
-      matrix: # generate multiple jobs 
-        python: ["3.10", "3.11", "3.12", "3.13"]
+# jobs: 
+#   test:
+#     runs-on: ubuntu-latest 
+#     strategy: 
+#       matrix: # generate multiple jobs 
+#         python: ["3.10", "3.11", "3.12", "3.13"]
 
+#     steps:
+#       - uses: actions/checkout@v4 
+#       - uses: actions/setup-python@v5
+#         with: 
+#           python-version: $ {{ matrix.python }}  # insert matrix var 
+      
+#       - run: echo "Showing Python Version"
+#       - run: python --version
+# What you learned:
+# - `strategy.matrix`  expands automatically. 
+# -  `$ {{ matrix.python }}` = interpolation (Github Syntax, not plain YAML)
+
+## 🚀 Real-World YAML Lesson 3: Passing Artifacts Between Jobs
+jobs:
+  build:
+    runs-on: ubuntu-latest 
     steps:
       - uses: actions/checkout@v4 
-      - uses: actions/setup-python@v5
+      - run: npm ci && npm run build 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with: 
-          python-version: ${{ matrix.python }}  # insert matrix var 
-      
-      - run: echo "Showing Python Version"
-      - run: python --version
+          name: dist-files
+          path: dist/ 
+
+  deploy: 
+    needs: build
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Download Artifact 
+        uses: actions/download-artifact@v4
+        with: 
+          name: dist-files
+      - run: echo "Deploying..."
