@@ -1,7 +1,8 @@
 {
   "scripts": {
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "build": "echo 'No build step needed'"
   },
   "name": "devops_course",
   "version": "1.0.0",
