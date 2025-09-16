@@ -130,6 +130,7 @@ jobs:
     # condition
     if: github.ref == 'refs/heads/master'   
     steps: 
+      - run: echo "${{github.ref}}"
       - run: echo "Deploying to Production"
 
     
