@@ -104,7 +104,7 @@ name: Passing Artifacts Between Jobs
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ master, dev ]
   pull_request:
 
 jobs:
