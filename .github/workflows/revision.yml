@@ -10,11 +10,11 @@
 
 #     # 3. Steps → commands or actions inside a job.
 #     steps:
-#       - uses: action/checkout@v4 
+#       - uses: actions/checkout@v4 
 #       - run: echo "Hello World"
 
 #       # 4. Actions → prebuilt tasks (e.g., checkout code, setup Node.js).
-#       - uses: action/setup-node@v4
+#       - uses: actions/setup-node@v4
 #         with: 
 #           node-version: 20 
 
@@ -62,7 +62,7 @@ on:   # 👈 triggers
 #         uses: actions/checkout@v4  # action (prebuilt step) 
 
 #       - name: Setup Node.js 
-#         uses: action/setup-node@v4
+#         uses: actions/setup-node@v4
 #         with:
 #           node-version: 20  # map under 'with'
       
