@@ -1,6 +1,13 @@
 # This is a Yaml file and it is a comment:
 # Yaml is written in key value pair like 
-course_name: "Django Backend Developer"
-version: 1.5 
-price: 199
-
+courses:
+  course_name: "Django Backend Developer"
+  version: 1.5 
+  price: 199
+  is_publish: true
+  released_date: 2021-04-05 12:23:22
+  pre_enroll: null 
+  tags:
+    - python
+    - web developer 
+    - mysql
