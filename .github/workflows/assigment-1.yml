@@ -1,15 +1,17 @@
-name: Multi Branch Deployment
+name: Assignment 1 - Multi-Branch Deployment
 
 on:
   push:
-    branches: [master, dev] # only run on master or dev pushes
-  pull_request: # run on all PRs
+    branches: [main, dev]   # deploy only on these branches
+  pull_request:             # always run CI for PRs
 
 jobs:
   ci:
+    name: CI - Lint, Test, Build
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -20,33 +22,57 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Run lint
         run: npm run lint --if-present
 
-      - name: Test
+      - name: Run tests
         run: npm test --if-present
 
-      - name: Build
+      - name: Build project
         run: |
           npm run build --if-present || echo "No build script found"
-          mkdir -p dist 
-          echo "Dummy File" > dist/placeholder.txt 
+          mkdir -p dist
+          echo "Dummy File" > dist/placeholder.txt
 
-      - name: Upload Artifact
-        uses: actions/upload-artifacts@v4
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: Artifact-folder
-          path: folder/
+          name: build-dist
+          path: dist/
 
-  deploying_qa:
+  deploy_qa:
+    name: Deploy to QA
     needs: ci
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/dev' }}
-    steps:
-      - name: Download Artifact Output
-        uses: actions/download-artifacts@v4
-        with:
-          name: Artifact-folder
 
-      - name: Deploy to Production
-        run: echo "Deploying Production build from master branch"
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-dist
+
+      - name: Simulate QA deploy
+        run: echo "Deploying QA build from dev branch"
+
+      - name: Slack Notification
+        run: 'echo "Slack connected: QA deployment completed"'
+
+  deploy_prod:
+    name: Deploy to Production
+    needs: ci
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-dist
+
+      - name: Simulate Production deploy
+        run: echo "Deploying Production build from main branch"
+
+      - name: Slack Notification
+        run: 'echo "Slack connected: Production deployment completed"'
+
